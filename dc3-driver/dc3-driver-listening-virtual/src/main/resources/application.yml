@@ -1,0 +1,80 @@
+driver:
+  name: ListeningVirtualDriver
+  type: driver
+  project: @project.artifactId@
+  description: @project.description@
+  custom:
+    tcp:
+      port: 6270
+    udp:
+      port: 6271
+  schedule:
+    status:
+      enable: true
+      corn: '0/10 * * * * ?'
+    read:
+      enable: false
+      corn: '0/30 * * * * ?'
+    custom:
+      enable: true
+      corn:  '0/5 * * * * ?'
+  point-attribute:
+    - displayName: 关键字
+      name: key
+      type: string
+      value: 62
+      description: 报文关键字
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 起始字节
+      name: start
+      type: int
+      value: 0
+      description: 起始字节，包含该字节
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 结束字节
+      name: end
+      type: int
+      value: 8
+      description: 结束字节，不包含该字节
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 类型
+      name: type
+      type: string
+      value: string
+      description: 解析类型，short、int、long、float、double、boolean、string
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+
+server:
+  port: 8700
+
+spring:
+  profiles:
+    active:
+      - server
+      - register
+      - monitor
+      - rabbitmq
+      - quartz
+      - driver
+      - feign
+      - ${NODE_ENV:dev}
+
+logging:
+  file:
+    name: dc3/logs/driver/listening-virtual/${spring.application.name}.log
